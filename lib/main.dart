@@ -70,18 +70,7 @@ class MainApp extends StatelessWidget {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: TextFormField(
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "password"),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Please Enter your Password";
-                                          }
-                                          return null;
-                                        },
-                                        //validator here to add
-                                      ),
+                                      child: ToggleEyeIcon()
                                     )
                                   ],
                                 ),
@@ -96,7 +85,7 @@ class MainApp extends StatelessWidget {
                                               try {
                                                 if (_formKey.currentState!
                                                     .validate()) {
-                                                  print("submittted");
+                                                  print("submit");
                                                 }
                                               } catch (error) {
                                                 print(error);
@@ -125,6 +114,47 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ToggleEyeIcon extends StatefulWidget {
+  @override
+  _toggleEyeIcon createState() => _toggleEyeIcon();
+}
+
+class _toggleEyeIcon extends State<ToggleEyeIcon> {
+  bool _isHidden = true;
+  final _password = TextEditingController();
+
+  @override
+  void dispose(){
+    _password.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return  TextFormField(
+      controller: _password,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          suffixIcon: IconButton(onPressed: (){
+            setState(() {
+              _isHidden = !_isHidden;
+            });
+          }, icon: Icon(_isHidden ? Icons.visibility : Icons.visibility_off)),
+          labelText: "password"),
+
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please Enter your Password";
+        }
+        return null;
+      },
+      obscureText: _isHidden,
+      //validator here to add
     );
   }
 }
