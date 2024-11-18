@@ -11,7 +11,8 @@ class Profile extends StatelessWidget {
         children: [
           AppBar(
             elevation: 10,
-            backgroundColor: Colors.blueAccent,
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.deepPurpleAccent,
             automaticallyImplyLeading: false,
             title: Text("Profile"),
           ),

@@ -15,7 +15,53 @@ class _HomePageState extends State<HomePage> {
 
   // List of widgets for each tab
   final List<Widget> _pages = [
-    Center(child: Text("Home Page Content")),
+    Center(child: Builder(builder: (context) {
+      return SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    
+                    Column(
+                      children: [
+                        Image.asset('images/spcLOGO.png',width: 50,height: 50,),
+                        SizedBox(height: 20,),
+                        Text('"Quote here"'),
+                        SizedBox(height: 20,),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5))),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/vote');
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            // Ensures the Row doesn't take up more space than needed
+                            children: [
+                              Icon(size: 20, Icons.fingerprint_outlined),
+                              Text("VOTE"),
+                              SizedBox(width: 8),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                
+              ],
+            ),
+          ),
+        ),
+      );
+    })),
     Center(child: Profile()),
   ];
 

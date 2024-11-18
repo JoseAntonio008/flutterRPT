@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_app/Pages/Home.dart';
 import 'package:test_app/provider.dart';
+import 'package:test_app/routes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = context.watch<UserProvider>().isLoggedIn;
-
-    if (isLoggedIn) {
-      print(isLoggedIn);
-      Future.microtask(
-          () => {Navigator.pushReplacementNamed(context, '/home')});
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 200),
+          padding: const EdgeInsets.only(
+            bottom: 150,
+            top: 20,
+          ),
           child: SizedBox(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -62,10 +59,21 @@ class _CustomForm extends State<CustomForm> {
   bool isObscure = true;
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = context.watch<UserProvider>().isLoggedIn;
+
+    if (isLoggedIn) {
+      print(isLoggedIn);
+      Future.microtask(() {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => HomePage()),
+          (route) => false, // Removes all previous routes
+        );
+      });
+    }
     return Form(
         key: _formKey,
         child: SizedBox(
-          width: 350,
+          width: 250,
           child: Column(
             children: [
               TextFormField(
@@ -85,25 +93,15 @@ class _CustomForm extends State<CustomForm> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isObscure = !isObscure;
-                        });
-                      },
-                    ),
+                    prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(),
-                    labelText: "password"),
+                    labelText: "Student No."),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please Enter your password";
+                    return "Please Enter your Email";
                   }
                   return null;
                 },
-                obscureText: isObscure,
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -132,7 +130,7 @@ class _CustomForm extends State<CustomForm> {
                 height: 20,
               ),
               SizedBox(
-                width: 400,
+                width: 200,
                 height: 40,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -144,7 +142,12 @@ class _CustomForm extends State<CustomForm> {
                       if (_formKey?.currentState!.validate() ?? false) {
                         context.read<UserProvider>().login();
                         print("${context.read<UserProvider>().isLoggedIn}");
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Future.microtask(() {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (_) => HomePage()),
+                            (route) => false, // Remove all previous routes
+                          );
+                        });
                       }
                     },
                     child: Text("Login")),

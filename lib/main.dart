@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const appTitle = "Real Property Tax";
+    const appTitle = "10k";
 
     return MultiProvider(
       providers: [
@@ -23,8 +23,8 @@ class MainApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         title: appTitle,
-        initialRoute: AppRoutes.Login,
         onGenerateRoute: AppRoutes.generateRoute,
+        initialRoute: '/home',
       ),
     );
   }
