@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:test_app/routes.dart';
 import 'package:provider/provider.dart';
 import 'provider.dart';
+import 'package:flutter/rendering.dart';
+
 void main() {
+  // debugPaintSizeEnabled = true;
   runApp(const MainApp());
 }
 
@@ -12,15 +15,17 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const appTitle = "Real Property Tax";
-    
 
-    return  MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context)=> UserProvider())],
-      child:const MaterialApp(
-          title: appTitle,
-          initialRoute: AppRoutes.Login,
-          onGenerateRoute: AppRoutes.generateRoute,
-          
-        ),
-    );}}
-      
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => UserProvider()..loadLoginStatus())
+      ],
+      child: const MaterialApp(
+        title: appTitle,
+        initialRoute: AppRoutes.Login,
+        onGenerateRoute: AppRoutes.generateRoute,
+      ),
+    );
+  }
+}

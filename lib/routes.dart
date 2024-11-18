@@ -11,28 +11,35 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (context) {
-        // Using context.watch to listen for changes in the AuthProvider
-        final isLoggedIn = context.watch<UserProvider>().isLoggedIn;
+        // The login check is done here within the widget, not directly in the route
+        return Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            final isLoggedIn = userProvider.isLoggedIn;
 
-        switch (settings.name) {
-          case Login:
-            // If logged in, redirect to Home
-            if (isLoggedIn) {
-              return HomePage();
+            switch (settings.name) {
+              case Login:
+                if (isLoggedIn) {
+                  // Redirect to Home if logged in
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacementNamed(context, AppRoutes.Home);
+                  });
+                  return Container(); // Show an empty container while redirecting
+                }
+                return LoginPage();
+
+              case Home:
+                if (isLoggedIn) {
+                  return HomePage();
+                } else {
+                  // If not logged in, return the LoginPage
+                  return LoginPage();
+                }
+
+              default:
+                return LoginPage();
             }
-            return LoginPage();
-
-          case Home:
-            // If logged in, show HomePage, otherwise go to LoginPage
-            if (isLoggedIn) {
-              return HomePage();
-            } else {
-              return LoginPage();
-            }
-
-          default:
-            return LoginPage();
-        }
+          },
+        );
       },
     );
   }
