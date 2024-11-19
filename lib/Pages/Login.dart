@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:test_app/Pages/Home.dart';
 import 'package:test_app/provider.dart';
 import 'package:test_app/routes.dart';
+import '../services/api_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -57,6 +58,38 @@ class CustomForm extends StatefulWidget {
 class _CustomForm extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
   bool isObscure = true;
+  final emailController = TextEditingController();
+  final studentIdController = TextEditingController();
+  final passwordController = TextEditingController();
+  final ApiService apiService = ApiService();
+
+  bool isloading = false;
+
+  // void handleLogin() async {
+  //   setState(() {
+  //     isloading = true;
+  //   });
+
+  //   try {
+  //     if (_formKey.currentState?.validate() ?? false) {
+  //       final user = await apiService.login(
+  //           emailController.text, passwordController.text);
+  //       debugPrint("Logged in as ${user.name} ");
+  //       context.read<UserProvider>().login();
+  //       Navigator.pushReplacementNamed(context, '/home');
+  //     }
+  //   } catch (error) {
+  //     debugPrint('Login failed: $error');
+  //     // ScaffoldMessenger.of(context).showSnackBar(
+  //     //   SnackBar(content: Text('Login failed: $error')),
+  //     // );
+  //   } finally {
+  //     setState(() {
+  //       isloading = false;
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     final isLoggedIn = context.watch<UserProvider>().isLoggedIn;
@@ -77,6 +110,7 @@ class _CustomForm extends State<CustomForm> {
           child: Column(
             children: [
               TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
@@ -92,19 +126,21 @@ class _CustomForm extends State<CustomForm> {
                 height: 20,
               ),
               TextFormField(
+                controller: studentIdController,
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(),
                     labelText: "Student No."),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please Enter your Email";
+                    return "Please Enter your Student No.";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 20),
               TextFormField(
+                controller: passwordController,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -138,16 +174,18 @@ class _CustomForm extends State<CustomForm> {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5))),
-                    onPressed: () {
-                      if (_formKey?.currentState!.validate() ?? false) {
-                        context.read<UserProvider>().login();
-                        print("${context.read<UserProvider>().isLoggedIn}");
-                        Future.microtask(() {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (_) => HomePage()),
-                            (route) => false, // Remove all previous routes
-                          );
-                        });
+                    onPressed: () async {
+                      final provider =
+                          Provider.of<UserProvider>(context, listen: false);
+                      try {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          print(isLoggedIn);
+                          await provider.login(
+                              emailController.text, passwordController.text);
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      } catch (e) {
+                        debugPrint("error: $e");
                       }
                     },
                     child: Text("Login")),

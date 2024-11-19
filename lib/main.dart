@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context) => UserProvider()..loadLoginStatus())
+            create: (context) => UserProvider()..loadLoginStatus()),
       ],
       child: const MaterialApp(
         title: appTitle,

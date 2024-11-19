@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   // List of widgets for each tab
   final List<Widget> _pages = [
     Center(child: Builder(builder: (context) {
+      final user = context.watch<UserProvider>().user;
       return SingleChildScrollView(
         child: Center(
           child: SizedBox(
@@ -24,13 +25,20 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    
                     Column(
                       children: [
-                        Image.asset('images/spcLOGO.png',width: 50,height: 50,),
-                        SizedBox(height: 20,),
-                        Text('"Quote here"'),
-                        SizedBox(height: 20,),
+                        Image.asset(
+                          'images/spcLOGO.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text('"Hi ${user?.name}"'),
+                        SizedBox(
+                          height: 20,
+                        ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -55,7 +63,6 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 50,
                 ),
-                
               ],
             ),
           ),
