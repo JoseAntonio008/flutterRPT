@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:test_app/Pages/Home.dart';
 import 'package:test_app/provider.dart';
@@ -64,31 +65,6 @@ class _CustomForm extends State<CustomForm> {
   final ApiService apiService = ApiService();
 
   bool isloading = false;
-
-  // void handleLogin() async {
-  //   setState(() {
-  //     isloading = true;
-  //   });
-
-  //   try {
-  //     if (_formKey.currentState?.validate() ?? false) {
-  //       final user = await apiService.login(
-  //           emailController.text, passwordController.text);
-  //       debugPrint("Logged in as ${user.name} ");
-  //       context.read<UserProvider>().login();
-  //       Navigator.pushReplacementNamed(context, '/home');
-  //     }
-  //   } catch (error) {
-  //     debugPrint('Login failed: $error');
-  //     // ScaffoldMessenger.of(context).showSnackBar(
-  //     //   SnackBar(content: Text('Login failed: $error')),
-  //     // );
-  //   } finally {
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +161,16 @@ class _CustomForm extends State<CustomForm> {
                           Navigator.pushReplacementNamed(context, '/home');
                         }
                       } catch (e) {
-                        debugPrint("error: $e");
+                        Fluttertoast.showToast(
+                          msg: e.toString(),
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.TOP,
+                          backgroundColor: Colors.redAccent,
+                          textColor: Colors.white,
+                          fontSize: 18,
+                          timeInSecForIosWeb: 1
+                        );
+                        // print("error: $e");
                       }
                     },
                     child: Text("Login")),

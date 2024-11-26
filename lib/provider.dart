@@ -18,6 +18,10 @@ class UserProvider extends ChangeNotifier {
   Future<void> loadLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('user');
+    if (!prefs.containsKey('isLoggedIn')) {
+    print('isLoggedIn preference not found, defaulting to false.');
+  }
+
     isLogged = prefs.getBool('isLoggedIn') ?? false;
 
     if (userJson != null) {
@@ -40,6 +44,11 @@ class UserProvider extends ChangeNotifier {
         }));
     _user = user;
     isLogged = true;
+    print(isLoggedIn);
+    await prefs.setBool('isLoggedIn', true);
+    if (!prefs.containsKey('isLoggedIn')) {
+    print('isLoggedIn preference not found, defaulting to false.');
+  }
     notifyListeners();
   }
 
@@ -51,21 +60,20 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    try {
+    
       final apiService = ApiService();
       final user = await apiService.login(email, password);
       await saveUser(user);
-    } catch (e) {
-      throw Exception('login failed $e');
-    }
+    
   }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user');
-    await prefs.setBool('isLogged', false);
+    await prefs.setBool('isLoggedIn', false);
     _user = null;
     isLogged = false;
+    print(isLoggedIn);
     notifyListeners();
   }
 }

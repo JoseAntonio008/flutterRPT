@@ -6,13 +6,14 @@ class User {
   final String? token;
 
   User({
-    this.id,
+   required this.id,
     this.name,
     this.email,
     this.roles,
     this.token,
   });
 
+  
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as int?,

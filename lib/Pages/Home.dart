@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final isWideScreen = MediaQuery.of(context).size.width > 600;
     final isDesktop = MediaQuery.of(context).size.width < 600;
+    print("on home page");
 
     return Scaffold(
         resizeToAvoidBottomInset: true,

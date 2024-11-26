@@ -19,12 +19,12 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (context) => UserProvider()..loadLoginStatus()),
+            create: (_) => UserProvider()..loadLoginStatus()),
       ],
       child: const MaterialApp(
         title: appTitle,
         onGenerateRoute: AppRoutes.generateRoute,
-        initialRoute: '/home',
+        initialRoute: AppRoutes.Home,
       ),
     );
   }
